@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 98%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 20 100% 50%;
+  }
+
+  body {
+    @apply bg-[#0A0A0A] text-white antialiased;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply backdrop-blur-lg bg-white/5 border border-white/10 transition-all duration-300;
+  }
+  
+  .nav-link {
+    @apply relative text-sm font-medium text-gray-300 hover:text-white transition-colors
+           after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-primary
+           after:transition-all hover:after:w-full;
+  }
+
+  .heading-1 {
+    @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight;
+  }
+
+  .heading-2 {
+    @apply text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight;
+  }
+
+  /* Enhanced hover interactions */
+  .feature-card {
+    @apply glass-panel p-4 sm:p-6 rounded-lg transition-all duration-300 hover:scale-105 hover:bg-white/10;
+  }
+
+  .benefit-card {
+    @apply glass-panel p-6 sm:p-8 rounded-lg flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 
+           transition-all duration-300 hover:scale-105 hover:bg-white/10 hover:border-primary/30 text-center sm:text-left;
+  }
+
+  .faq-item {
+    @apply glass-panel rounded-lg border-none transition-all duration-300 
+           hover:bg-white/10 hover:scale-[1.02];
+  }
+
+  .social-link {
+    @apply text-gray-400 hover:text-primary transition-colors duration-300 
+           hover:scale-110 transform;
+  }
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.animate-on-scroll.visible {
+  animation: fade-up 0.5s ease-out forwards;
+}
