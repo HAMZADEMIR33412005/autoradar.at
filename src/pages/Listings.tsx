@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchListings } from "@/services/api";
@@ -40,7 +39,7 @@ const Listings = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="container mx-auto px-4 py-8">
-        <div className="flex gap-6">
+        <div className="flex flex-col md:grid md:grid-cols-[250px_1fr] gap-6">
           <ListingsFilter filters={filters} setFilters={setFilters} />
           {isLoading ? (
             <div className="flex-1 flex items-center justify-center">
@@ -56,7 +55,9 @@ const Listings = () => {
               </Alert>
             </div>
           ) : (
-            <ListingsGrid listings={filteredListings || []} />
+            <div className="flex-1">
+              <ListingsGrid listings={filteredListings || []} />
+            </div>
           )}
         </div>
       </div>

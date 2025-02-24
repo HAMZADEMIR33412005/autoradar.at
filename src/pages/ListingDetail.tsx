@@ -1,4 +1,3 @@
-
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchListings } from "@/services/api";
@@ -47,15 +46,16 @@ const ListingDetail = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="container mx-auto px-4 py-8">
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate("/listings")}
-          className="mb-6 hover:bg-white/5"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Listings
-        </Button>
-
+        <div className="mt-6 md:mt-4">
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate("/")}
+            className="mb-6 hover:bg-white/5"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Listings
+          </Button>
+        </div>
         <Card className="p-8 bg-white/5 backdrop-blur-lg border border-white/10">
           <div className="grid md:grid-cols-2 gap-8">
             <div className="aspect-video bg-surface-secondary rounded-lg overflow-hidden">

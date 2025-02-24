@@ -1,4 +1,3 @@
-
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -36,7 +35,7 @@ export const ListingsFilter = ({ filters, setFilters }: FilterProps) => {
   };
 
   return (
-    <Card className="w-64 p-4 space-y-4 h-fit sticky top-24">
+    <Card className="w-full md:w-64 p-4 space-y-4 h-fit md:sticky top-24 md:self-start">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">Filters</h2>
         <Button variant="ghost" size="sm" onClick={resetFilters}>

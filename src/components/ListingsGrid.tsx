@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -48,7 +47,7 @@ export const ListingsGrid = ({ listings }: ListingsGridProps) => {
                   <p className="font-medium">{formatMileage(listing.Mileage)}</p>
                 </div>
               </div>
-              <p className="text-sm text-gray-400 truncate">
+              <p className="text-sm text-gray-400 break-words">
                 📍 {listing.Location}
               </p>
             </div>
