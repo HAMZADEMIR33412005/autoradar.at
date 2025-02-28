@@ -1,22 +1,45 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { fetchListings } from "@/services/api";
+import { fetchCarListings, fetchRealEstateListings } from "@/services/api";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, ExternalLink, Loader2 } from "lucide-react";
+import { ArrowLeft, ExternalLink, Loader2, Car, Home } from "lucide-react";
+import { CarListing, RealEstateListing } from "@/types/listing";
 
 const ListingDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const path = window.location.pathname;
+  const isCarListing = path.includes('/cars/');
   
-  const { data: listings, isLoading } = useQuery({
-    queryKey: ["listings"],
-    queryFn: fetchListings,
+  // Query for car listings if the route is for cars
+  const { 
+    data: carListings, 
+    isLoading: isCarListingsLoading 
+  } = useQuery({
+    queryKey: ["carListings"],
+    queryFn: fetchCarListings,
+    enabled: isCarListing
   });
 
-  const listing = listings?.[Number(id)];
+  // Query for real estate listings if the route is for real estate
+  const { 
+    data: realEstateListings, 
+    isLoading: isRealEstateListingsLoading 
+  } = useQuery({
+    queryKey: ["realEstateListings"],
+    queryFn: fetchRealEstateListings,
+    enabled: !isCarListing
+  });
+
+  const isLoading = isCarListing ? isCarListingsLoading : isRealEstateListingsLoading;
+  
+  // Get the appropriate listing based on the route type
+  const listing = isCarListing 
+    ? carListings?.[Number(id)] as CarListing 
+    : realEstateListings?.[Number(id)] as RealEstateListing;
 
   const formatPrice = (price: number) => {
     return `€${price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
@@ -24,6 +47,10 @@ const ListingDetail = () => {
 
   const formatMileage = (mileage: number) => {
     return `${Math.round(mileage).toLocaleString()} km`;
+  };
+
+  const formatArea = (area: number) => {
+    return `${area} m²`;
   };
 
   if (isLoading) {
@@ -49,7 +76,7 @@ const ListingDetail = () => {
         <div className="mt-6 md:mt-4">
           <Button 
             variant="ghost" 
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/listings")}
             className="mb-6 hover:bg-white/5"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -60,9 +87,21 @@ const ListingDetail = () => {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="aspect-video bg-surface-secondary rounded-lg overflow-hidden">
               <div className="w-full h-full flex items-center justify-center bg-gray-800/50 text-center p-4">
-                <span className="text-gray-300 font-medium text-lg">
-                  {listing.Brand} {listing.Model}
-                </span>
+                {isCarListing ? (
+                  <>
+                    <Car className="w-6 h-6 mr-2 text-primary" />
+                    <span className="text-gray-300 font-medium text-lg">
+                      {(listing as CarListing).Brand} {(listing as CarListing).Model}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <Home className="w-6 h-6 mr-2 text-primary" />
+                    <span className="text-gray-300 font-medium text-lg">
+                      {(listing as RealEstateListing)["Property Type"]}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
 
@@ -74,28 +113,56 @@ const ListingDetail = () => {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-gray-900/30 rounded-lg p-4">
-                  <p className="text-sm text-gray-400 mb-1">Year</p>
-                  <p className="font-medium text-lg">{listing.Year}</p>
+              {isCarListing ? (
+                // Car details
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-gray-900/30 rounded-lg p-4">
+                    <p className="text-sm text-gray-400 mb-1">Year</p>
+                    <p className="font-medium text-lg">{(listing as CarListing).Year}</p>
+                  </div>
+                  <div className="bg-gray-900/30 rounded-lg p-4">
+                    <p className="text-sm text-gray-400 mb-1">Mileage</p>
+                    <p className="font-medium text-lg">{formatMileage((listing as CarListing).Mileage)}</p>
+                  </div>
+                  <div className="bg-gray-900/30 rounded-lg p-4">
+                    <p className="text-sm text-gray-400 mb-1">Horsepower</p>
+                    <p className="font-medium text-lg">{Math.round((listing as CarListing).Horsepower)} hp</p>
+                  </div>
+                  <div className="bg-gray-900/30 rounded-lg p-4">
+                    <p className="text-sm text-gray-400 mb-1">Brand/Model</p>
+                    <p className="font-medium text-lg">{(listing as CarListing).Brand} {(listing as CarListing).Model}</p>
+                  </div>
                 </div>
-                <div className="bg-gray-900/30 rounded-lg p-4">
-                  <p className="text-sm text-gray-400 mb-1">Mileage</p>
-                  <p className="font-medium text-lg">{formatMileage(listing.Mileage)}</p>
+              ) : (
+                // Real Estate details
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-gray-900/30 rounded-lg p-4">
+                    <p className="text-sm text-gray-400 mb-1">Property Type</p>
+                    <p className="font-medium text-lg">{(listing as RealEstateListing)["Property Type"]}</p>
+                  </div>
+                  <div className="bg-gray-900/30 rounded-lg p-4">
+                    <p className="text-sm text-gray-400 mb-1">Area</p>
+                    <p className="font-medium text-lg">{formatArea((listing as RealEstateListing).Area)}</p>
+                  </div>
+                  <div className="bg-gray-900/30 rounded-lg p-4">
+                    <p className="text-sm text-gray-400 mb-1">Rooms</p>
+                    <p className="font-medium text-lg">{(listing as RealEstateListing).Rooms}</p>
+                  </div>
+                  <div className="bg-gray-900/30 rounded-lg p-4">
+                    <p className="text-sm text-gray-400 mb-1">Year Built</p>
+                    <p className="font-medium text-lg">{(listing as RealEstateListing)["Year Built"]}</p>
+                  </div>
                 </div>
-                <div className="bg-gray-900/30 rounded-lg p-4">
-                  <p className="text-sm text-gray-400 mb-1">Horsepower</p>
-                  <p className="font-medium text-lg">{Math.round(listing.Horsepower)} hp</p>
-                </div>
-                <div className="bg-gray-900/30 rounded-lg p-4">
-                  <p className="text-sm text-gray-400 mb-1">Seller Type</p>
-                  <p className="font-medium text-lg">{listing["Seller Type"]}</p>
-                </div>
-              </div>
+              )}
 
               <div className="bg-gray-900/30 rounded-lg p-4">
                 <p className="text-sm text-gray-400 mb-1">Location</p>
                 <p className="font-medium text-lg">{listing.Location}</p>
+              </div>
+
+              <div className="bg-gray-900/30 rounded-lg p-4">
+                <p className="text-sm text-gray-400 mb-1">Seller Type</p>
+                <p className="font-medium text-lg">{listing["Seller Type"]}</p>
               </div>
 
               <div className="pt-4">

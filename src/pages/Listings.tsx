@@ -1,16 +1,38 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchListings } from "@/services/api";
+import { fetchCarListings, fetchRealEstateListings } from "@/services/api";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ListingsFilter } from "@/components/ListingsFilter";
 import { ListingsGrid } from "@/components/ListingsGrid";
-import { CarListing } from "@/types/listing";
-import { Loader2, AlertTriangle } from "lucide-react";
+import { ListingType, CarListing, RealEstateListing } from "@/types/listing";
+import { Loader2, AlertTriangle, Car, Home } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
+
+interface CarFilters {
+  brand: string;
+  minPrice: string;
+  maxPrice: string;
+  minYear: string;
+  maxYear: string;
+  sellerType: string;
+}
+
+interface RealEstateFilters {
+  propertyType: string;
+  minPrice: string;
+  maxPrice: string;
+  minRooms: string;
+  minArea: string;
+  sellerType: string;
+}
 
 const Listings = () => {
-  const [filters, setFilters] = useState({
+  const [activeTab, setActiveTab] = useState<ListingType>("cars");
+  
+  const [carFilters, setCarFilters] = useState<CarFilters>({
     brand: "",
     minPrice: "",
     maxPrice: "",
@@ -19,47 +41,154 @@ const Listings = () => {
     sellerType: "",
   });
 
-  const { data: listings, isLoading, error } = useQuery({
-    queryKey: ["listings"],
-    queryFn: fetchListings,
+  const [realEstateFilters, setRealEstateFilters] = useState<RealEstateFilters>({
+    propertyType: "",
+    minPrice: "",
+    maxPrice: "",
+    minRooms: "",
+    minArea: "",
+    sellerType: "",
+  });
+
+  // Car listings query
+  const { 
+    data: carListings, 
+    isLoading: isCarListingsLoading, 
+    error: carListingsError 
+  } = useQuery({
+    queryKey: ["carListings"],
+    queryFn: fetchCarListings,
     retry: 2
   });
 
-  const filteredListings = listings?.filter((listing) => {
-    if (filters.brand && listing.Brand.toLowerCase() !== filters.brand.toLowerCase()) return false;
-    if (filters.minPrice && listing["Actual Price"] < Number(filters.minPrice)) return false;
-    if (filters.maxPrice && listing["Actual Price"] > Number(filters.maxPrice)) return false;
-    if (filters.minYear && listing.Year < Number(filters.minYear)) return false;
-    if (filters.maxYear && listing.Year > Number(filters.maxYear)) return false;
-    if (filters.sellerType && listing["Seller Type"] !== filters.sellerType) return false;
+  // Real estate listings query
+  const { 
+    data: realEstateListings, 
+    isLoading: isRealEstateListingsLoading, 
+    error: realEstateListingsError 
+  } = useQuery({
+    queryKey: ["realEstateListings"],
+    queryFn: fetchRealEstateListings,
+    retry: 2
+  });
+
+  // Filter car listings based on selected filters
+  const filteredCarListings = carListings?.filter((listing: CarListing) => {
+    if (carFilters.brand && listing.Brand.toLowerCase() !== carFilters.brand.toLowerCase()) return false;
+    if (carFilters.minPrice && listing["Actual Price"] < Number(carFilters.minPrice)) return false;
+    if (carFilters.maxPrice && listing["Actual Price"] > Number(carFilters.maxPrice)) return false;
+    if (carFilters.minYear && listing.Year < Number(carFilters.minYear)) return false;
+    if (carFilters.maxYear && listing.Year > Number(carFilters.maxYear)) return false;
+    if (carFilters.sellerType && listing["Seller Type"] !== carFilters.sellerType) return false;
     return true;
   });
+
+  // Filter real estate listings based on selected filters
+  const filteredRealEstateListings = realEstateListings?.filter((listing: RealEstateListing) => {
+    if (realEstateFilters.propertyType && 
+        listing["Property Type"].toLowerCase() !== realEstateFilters.propertyType.toLowerCase()) return false;
+    if (realEstateFilters.minPrice && listing["Actual Price"] < Number(realEstateFilters.minPrice)) return false;
+    if (realEstateFilters.maxPrice && listing["Actual Price"] > Number(realEstateFilters.maxPrice)) return false;
+    if (realEstateFilters.minRooms && listing.Rooms < Number(realEstateFilters.minRooms)) return false;
+    if (realEstateFilters.minArea && listing.Area < Number(realEstateFilters.minArea)) return false;
+    if (realEstateFilters.sellerType && listing["Seller Type"] !== realEstateFilters.sellerType) return false;
+    return true;
+  });
+
+  // Handle tab change
+  const handleTabChange = (value: string) => {
+    setActiveTab(value as ListingType);
+  };
+
+  // Determine if loading or error based on active tab
+  const isLoading = activeTab === "cars" ? isCarListingsLoading : isRealEstateListingsLoading;
+  const error = activeTab === "cars" ? carListingsError : realEstateListingsError;
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col md:grid md:grid-cols-[250px_1fr] gap-6">
-          <ListingsFilter filters={filters} setFilters={setFilters} />
-          {isLoading ? (
-            <div className="flex-1 flex items-center justify-center">
-              <Loader2 className="w-8 h-8 animate-spin" />
-            </div>
-          ) : error ? (
-            <div className="flex-1">
-              <Alert variant="destructive">
-                <AlertTriangle className="h-4 w-4" />
-                <AlertDescription>
-                  Failed to load listings. Please try again later.
-                </AlertDescription>
-              </Alert>
-            </div>
-          ) : (
-            <div className="flex-1">
-              <ListingsGrid listings={filteredListings || []} />
-            </div>
-          )}
-        </div>
+        <Tabs defaultValue="cars" onValueChange={handleTabChange} className="w-full">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+            <h1 className="text-3xl font-bold mb-4 sm:mb-0">Listings</h1>
+            <TabsList className="bg-background border border-gray-800">
+              <TabsTrigger 
+                value="cars"
+                className={cn(
+                  "data-[state=active]:bg-primary data-[state=active]:text-primary-foreground",
+                  "flex items-center gap-2"
+                )}
+              >
+                <Car className="w-4 h-4" /> Cars
+              </TabsTrigger>
+              <TabsTrigger 
+                value="realEstate"
+                className={cn(
+                  "data-[state=active]:bg-primary data-[state=active]:text-primary-foreground",
+                  "flex items-center gap-2"
+                )}
+              >
+                <Home className="w-4 h-4" /> Real Estate
+              </TabsTrigger>
+            </TabsList>
+          </div>
+          
+          <div className="flex flex-col md:grid md:grid-cols-[250px_1fr] gap-6">
+            <TabsContent value="cars" className="mt-0 flex flex-col md:grid md:grid-cols-[250px_1fr] gap-6">
+              <ListingsFilter 
+                filters={carFilters} 
+                setFilters={setCarFilters} 
+                listingType="cars" 
+              />
+              {isCarListingsLoading ? (
+                <div className="flex-1 flex items-center justify-center">
+                  <Loader2 className="w-8 h-8 animate-spin" />
+                </div>
+              ) : carListingsError ? (
+                <div className="flex-1">
+                  <Alert variant="destructive">
+                    <AlertTriangle className="h-4 w-4" />
+                    <AlertDescription>
+                      Failed to load car listings. Please try again later.
+                    </AlertDescription>
+                  </Alert>
+                </div>
+              ) : (
+                <ListingsGrid 
+                  listings={filteredCarListings || []} 
+                  listingType="cars" 
+                />
+              )}
+            </TabsContent>
+
+            <TabsContent value="realEstate" className="mt-0 flex flex-col md:grid md:grid-cols-[250px_1fr] gap-6">
+              <ListingsFilter 
+                filters={realEstateFilters} 
+                setFilters={setRealEstateFilters} 
+                listingType="realEstate" 
+              />
+              {isRealEstateListingsLoading ? (
+                <div className="flex-1 flex items-center justify-center">
+                  <Loader2 className="w-8 h-8 animate-spin" />
+                </div>
+              ) : realEstateListingsError ? (
+                <div className="flex-1">
+                  <Alert variant="destructive">
+                    <AlertTriangle className="h-4 w-4" />
+                    <AlertDescription>
+                      Failed to load real estate listings. Please try again later.
+                    </AlertDescription>
+                  </Alert>
+                </div>
+              ) : (
+                <ListingsGrid 
+                  listings={filteredRealEstateListings || []} 
+                  listingType="realEstate" 
+                />
+              )}
+            </TabsContent>
+          </div>
+        </Tabs>
       </div>
       <Footer />
     </div>

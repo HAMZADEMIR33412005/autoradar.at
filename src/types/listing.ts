@@ -1,4 +1,3 @@
-
 export interface CarListing {
   "Actual Price": number;
   "Ad Link": string;
@@ -13,3 +12,17 @@ export interface CarListing {
   "Seller Type": string;
   "Year": number;
 }
+
+export interface RealEstateListing {
+  "Actual Price": number;
+  "Ad Link": string;
+  "Location": string;
+  "Name": string;
+  "Area": number; // in square meters
+  "Property Type": string; // apartment, house, etc.
+  "Rooms": number;
+  "Year Built": number;
+  "Seller Type": string;
+}
+
+export type ListingType = "cars" | "realEstate";
