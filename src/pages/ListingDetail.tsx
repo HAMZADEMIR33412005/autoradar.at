@@ -64,7 +64,7 @@ const ListingDetail = () => {
   if (!listing) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <p>Listing not found</p>
+        <p>Inserat nicht gefunden</p>
       </div>
     );
   }
@@ -80,7 +80,7 @@ const ListingDetail = () => {
             className="mb-6 hover:bg-white/5"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Listings
+            Zurück zur Übersicht
           </Button>
         </div>
         <Card className="p-8 bg-white/5 backdrop-blur-lg border border-white/10">
@@ -117,19 +117,19 @@ const ListingDetail = () => {
                 // Car details
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-gray-900/30 rounded-lg p-4">
-                    <p className="text-sm text-gray-400 mb-1">Year</p>
+                    <p className="text-sm text-gray-400 mb-1">Baujahr</p>
                     <p className="font-medium text-lg">{(listing as CarListing).Year}</p>
                   </div>
                   <div className="bg-gray-900/30 rounded-lg p-4">
-                    <p className="text-sm text-gray-400 mb-1">Mileage</p>
+                    <p className="text-sm text-gray-400 mb-1">Kilometerstand</p>
                     <p className="font-medium text-lg">{formatMileage((listing as CarListing).Mileage)}</p>
                   </div>
                   <div className="bg-gray-900/30 rounded-lg p-4">
-                    <p className="text-sm text-gray-400 mb-1">Horsepower</p>
-                    <p className="font-medium text-lg">{Math.round((listing as CarListing).Horsepower)} hp</p>
+                    <p className="text-sm text-gray-400 mb-1">PS</p>
+                    <p className="font-medium text-lg">{Math.round((listing as CarListing).Horsepower)} PS</p>
                   </div>
                   <div className="bg-gray-900/30 rounded-lg p-4">
-                    <p className="text-sm text-gray-400 mb-1">Brand/Model</p>
+                    <p className="text-sm text-gray-400 mb-1">Marke/Modell</p>
                     <p className="font-medium text-lg">{(listing as CarListing).Brand} {(listing as CarListing).Model}</p>
                   </div>
                 </div>
@@ -137,31 +137,31 @@ const ListingDetail = () => {
                 // Real Estate details
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-gray-900/30 rounded-lg p-4">
-                    <p className="text-sm text-gray-400 mb-1">Property Type</p>
+                    <p className="text-sm text-gray-400 mb-1">Objekttyp</p>
                     <p className="font-medium text-lg">{(listing as RealEstateListing)["Property Type"]}</p>
                   </div>
                   <div className="bg-gray-900/30 rounded-lg p-4">
-                    <p className="text-sm text-gray-400 mb-1">Area</p>
+                    <p className="text-sm text-gray-400 mb-1">Fläche</p>
                     <p className="font-medium text-lg">{formatArea((listing as RealEstateListing).Area)}</p>
                   </div>
                   <div className="bg-gray-900/30 rounded-lg p-4">
-                    <p className="text-sm text-gray-400 mb-1">Rooms</p>
+                    <p className="text-sm text-gray-400 mb-1">Zimmer</p>
                     <p className="font-medium text-lg">{(listing as RealEstateListing).Rooms}</p>
                   </div>
                   <div className="bg-gray-900/30 rounded-lg p-4">
-                    <p className="text-sm text-gray-400 mb-1">Year Built</p>
+                    <p className="text-sm text-gray-400 mb-1">Baujahr</p>
                     <p className="font-medium text-lg">{(listing as RealEstateListing)["Year Built"]}</p>
                   </div>
                 </div>
               )}
 
               <div className="bg-gray-900/30 rounded-lg p-4">
-                <p className="text-sm text-gray-400 mb-1">Location</p>
+                <p className="text-sm text-gray-400 mb-1">Standort</p>
                 <p className="font-medium text-lg">{listing.Location}</p>
               </div>
 
               <div className="bg-gray-900/30 rounded-lg p-4">
-                <p className="text-sm text-gray-400 mb-1">Seller Type</p>
+                <p className="text-sm text-gray-400 mb-1">Verkäufertyp</p>
                 <p className="font-medium text-lg">{listing["Seller Type"]}</p>
               </div>
 
@@ -171,7 +171,7 @@ const ListingDetail = () => {
                   onClick={() => window.open(listing["Ad Link"], "_blank")}
                 >
                   <ExternalLink className="w-5 h-5 mr-2" />
-                  View Original Listing
+                  Originalinserat ansehen
                 </Button>
               </div>
             </div>

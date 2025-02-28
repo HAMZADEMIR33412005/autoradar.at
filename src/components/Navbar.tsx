@@ -26,12 +26,12 @@ export const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="nav-link">Features</a>
-            <a href="#how-it-works" className="nav-link">How it Works</a>
-            <a href="#pricing" className="nav-link">Pricing</a>
-            <a href="#contact" className="nav-link">Contact</a>
+            <a href="#features" className="nav-link">Funktionen</a>
+            <a href="#how-it-works" className="nav-link">So funktioniert's</a>
+            <a href="#pricing" className="nav-link">Preise</a>
+            <a href="#contact" className="nav-link">Kontakt</a>
             <Button className="bg-primary hover:bg-primary-hover text-white">
-              Get Started
+              Loslegen
             </Button>
           </div>
 
@@ -48,12 +48,12 @@ export const Navbar = () => {
         {isMenuOpen && (
           <div className="md:hidden absolute top-full left-0 right-0 bg-surface/95 backdrop-blur-lg">
             <div className="flex flex-col space-y-4 p-6">
-              <a href="#features" className="nav-link">Features</a>
-              <a href="#how-it-works" className="nav-link">How it Works</a>
-              <a href="#pricing" className="nav-link">Pricing</a>
-              <a href="#contact" className="nav-link">Contact</a>
+              <a href="#features" className="nav-link">Funktionen</a>
+              <a href="#how-it-works" className="nav-link">So funktioniert's</a>
+              <a href="#pricing" className="nav-link">Preise</a>
+              <a href="#contact" className="nav-link">Kontakt</a>
               <Button className="bg-primary hover:bg-primary-hover text-white w-full">
-                Get Started
+                Loslegen
               </Button>
             </div>
           </div>

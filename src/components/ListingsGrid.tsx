@@ -27,7 +27,7 @@ export const ListingsGrid = ({ listings, listingType }: ListingsGridProps) => {
   if (listings.length === 0) {
     return (
       <div className="flex justify-center items-center h-64">
-        <p className="text-gray-400">No listings found matching your criteria.</p>
+        <p className="text-gray-400">Keine Einträge gefunden, die Ihren Kriterien entsprechen.</p>
       </div>
     );
   }
@@ -47,29 +47,29 @@ export const ListingsGrid = ({ listings, listingType }: ListingsGridProps) => {
             <CardContent className="p-6">
               <div className="aspect-video bg-surface-secondary rounded-lg mb-4 overflow-hidden bg-gray-800/50 flex items-center justify-center">
                 <Car className="w-6 h-6 mr-2 text-primary" />
-                <span className="text-gray-300 font-medium">{listing.Brand || 'Unknown'} {listing.Model || ''}</span>
+                <span className="text-gray-300 font-medium">{listing.Brand || 'Unbekannt'} {listing.Model || ''}</span>
               </div>
               <h3 className="text-lg font-semibold mb-3 line-clamp-2 min-h-[3.5rem]">{listing.Name || `${listing.Brand} ${listing.Model}`}</h3>
               <div className="space-y-3">
                 <p className="text-2xl font-bold text-primary">
-                  {typeof listing["Actual Price"] === 'number' ? formatPrice(listing["Actual Price"]) : 'Price unavailable'}
+                  {typeof listing["Actual Price"] === 'number' ? formatPrice(listing["Actual Price"]) : 'Preis auf Anfrage'}
                 </p>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="bg-gray-900/30 rounded-lg p-2">
-                    <p className="text-gray-400">Year</p>
-                    <p className="font-medium">{listing.Year || 'N/A'}</p>
+                    <p className="text-gray-400">Baujahr</p>
+                    <p className="font-medium">{listing.Year || 'k.A.'}</p>
                   </div>
                   <div className="bg-gray-900/30 rounded-lg p-2">
-                    <p className="text-gray-400">Mileage</p>
-                    <p className="font-medium">{typeof listing.Mileage === 'number' ? formatMileage(listing.Mileage) : 'N/A'}</p>
+                    <p className="text-gray-400">Kilometerstand</p>
+                    <p className="font-medium">{typeof listing.Mileage === 'number' ? formatMileage(listing.Mileage) : 'k.A.'}</p>
                   </div>
                   <div className="bg-gray-900/30 rounded-lg p-2">
-                    <p className="text-gray-400">Horsepower</p>
-                    <p className="font-medium">{typeof listing.Horsepower === 'number' ? `${Math.round(listing.Horsepower)} HP` : 'N/A'}</p>
+                    <p className="text-gray-400">PS</p>
+                    <p className="font-medium">{typeof listing.Horsepower === 'number' ? `${Math.round(listing.Horsepower)} PS` : 'k.A.'}</p>
                   </div>
                   <div className="bg-gray-900/30 rounded-lg p-2">
-                    <p className="text-gray-400">Seller</p>
-                    <p className="font-medium">{listing["Seller Type"] || 'N/A'}</p>
+                    <p className="text-gray-400">Verkäufer</p>
+                    <p className="font-medium">{listing["Seller Type"] || 'k.A.'}</p>
                   </div>
                 </div>
                 {listing.Location && (
@@ -85,7 +85,7 @@ export const ListingsGrid = ({ listings, listingType }: ListingsGridProps) => {
                 onClick={() => navigate(`/listings/cars/${index}`)}
               >
                 <Eye className="w-4 h-4 mr-2" />
-                View Details
+                Details ansehen
               </Button>
             </CardFooter>
           </Card>
@@ -109,13 +109,13 @@ export const ListingsGrid = ({ listings, listingType }: ListingsGridProps) => {
                 <p className="text-2xl font-bold text-primary">
                   {formatPrice(listing["Actual Price"])}
                 </p>
-                <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="grid grid-cols-2 gap-2 text-sm items-start">
                   <div className="bg-gray-900/30 rounded-lg p-2">
-                    <p className="text-gray-400">Area</p>
+                    <p className="text-gray-400">Fläche</p>
                     <p className="font-medium">{formatArea(listing.Area)}</p>
                   </div>
                   <div className="bg-gray-900/30 rounded-lg p-2">
-                    <p className="text-gray-400">Rooms</p>
+                    <p className="text-gray-400">Zimmer</p>
                     <p className="font-medium">{listing.Rooms}</p>
                   </div>
                 </div>
@@ -130,7 +130,7 @@ export const ListingsGrid = ({ listings, listingType }: ListingsGridProps) => {
                 onClick={() => navigate(`/listings/realestate/${index}`)}
               >
                 <Eye className="w-4 h-4 mr-2" />
-                View Details
+                Details ansehen
               </Button>
             </CardFooter>
           </Card>

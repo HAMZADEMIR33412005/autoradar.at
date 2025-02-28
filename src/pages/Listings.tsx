@@ -134,7 +134,7 @@ const Listings = () => {
         <div className="container mx-auto px-4 py-2 sm:py-4">
           <Tabs defaultValue="cars" onValueChange={handleTabChange} className="w-full">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4 mt-20">
-              <h1 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-0">Listings</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-0">Inserate</h1>
               <TabsList className="bg-background border border-gray-800 w-full sm:w-auto">
                 <TabsTrigger 
                   value="cars"
@@ -143,7 +143,7 @@ const Listings = () => {
                     "flex items-center gap-2 flex-1 sm:flex-initial"
                   )}
                 >
-                  <Car className="w-4 h-4" /> Cars
+                  <Car className="w-4 h-4" /> Autos
                 </TabsTrigger>
                 <TabsTrigger 
                   value="realEstate"
@@ -152,7 +152,7 @@ const Listings = () => {
                     "flex items-center gap-2 flex-1 sm:flex-initial"
                   )}
                 >
-                  <Home className="w-4 h-4" /> Real Estate
+                  <Home className="w-4 h-4" /> Immobilien
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -166,11 +166,11 @@ const Listings = () => {
                 >
                   {isFilterVisible ? (
                     <>
-                      <X className="h-4 w-4" /> Hide Filters
+                      <X className="h-4 w-4" /> Filter ausblenden
                     </>
                   ) : (
                     <>
-                      <Filter className="h-4 w-4" /> Show Filters
+                      <Filter className="h-4 w-4" /> Filter anzeigen
                     </>
                   )}
                 </Button>
@@ -197,7 +197,7 @@ const Listings = () => {
                           <Alert variant="destructive">
                             <AlertTriangle className="h-4 w-4" />
                             <AlertDescription>
-                              Failed to load car listings. Please try again later.
+                              Fehler beim Laden der Autoinserate. Bitte versuchen Sie es später erneut.
                             </AlertDescription>
                           </Alert>
                         </div>
@@ -210,9 +210,9 @@ const Listings = () => {
                         <div className="flex items-center justify-center py-8 px-2 min-h-[200px]">
                           <div className="text-center">
                             <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-yellow-500" />
-                            <p className="text-lg font-medium">No car listings found</p>
+                            <p className="text-lg font-medium">Keine Autoinserate gefunden</p>
                             <p className="text-sm text-muted-foreground mt-1">
-                              Try adjusting your filters or check back later.
+                              Passen Sie Ihre Filter an oder schauen Sie später wieder vorbei.
                             </p>
                           </div>
                         </div>
@@ -243,7 +243,7 @@ const Listings = () => {
                           <Alert variant="destructive">
                             <AlertTriangle className="h-4 w-4" />
                             <AlertDescription>
-                              Failed to load real estate listings. Please try again later.
+                              Fehler beim Laden der Immobilieninserate. Bitte versuchen Sie es später erneut.
                             </AlertDescription>
                           </Alert>
                         </div>
@@ -256,9 +256,9 @@ const Listings = () => {
                         <div className="flex items-center justify-center py-8 px-2 min-h-[200px]">
                           <div className="text-center">
                             <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-yellow-500" />
-                            <p className="text-lg font-medium">No real estate listings found</p>
+                            <p className="text-lg font-medium">Keine Immobilieninserate gefunden</p>
                             <p className="text-sm text-muted-foreground mt-1">
-                              Try adjusting your filters or check back later.
+                              Passen Sie Ihre Filter an oder schauen Sie später wieder vorbei.
                             </p>
                           </div>
                         </div>
