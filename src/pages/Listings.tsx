@@ -149,69 +149,88 @@ const Listings = () => {
             </TabsList>
           </div>
           
-          <div className="flex flex-col md:grid md:grid-cols-[250px_1fr] gap-6">
-            <TabsContent value="cars" className="mt-0 flex flex-col md:grid md:grid-cols-[250px_1fr] gap-6">
-              <ListingsFilter 
-                filters={carFilters} 
-                setFilters={setCarFilters} 
-                listingType="cars" 
-              />
-              {isCarListingsLoading ? (
-                <div className="flex-1 flex items-center justify-center">
-                  <Loader2 className="w-8 h-8 animate-spin" />
-                </div>
-              ) : carListingsError ? (
-                <div className="flex-1">
-                  <Alert variant="destructive">
-                    <AlertTriangle className="h-4 w-4" />
-                    <AlertDescription>
-                      Failed to load car listings. Please try again later.
-                    </AlertDescription>
-                  </Alert>
-                </div>
-              ) : filteredCarListings && filteredCarListings.length > 0 ? (
-                <ListingsGrid 
-                  listings={filteredCarListings} 
+          {/* Fix: Remove the nested grid structure causing the layout issues */}
+          <div className="w-full">
+            <TabsContent value="cars" className="mt-0">
+              <div className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-6">
+                <ListingsFilter 
+                  filters={carFilters} 
+                  setFilters={setCarFilters} 
                   listingType="cars" 
                 />
-              ) : (
-                <div className="flex-1 flex items-center justify-center">
-                  <div className="text-center">
-                    <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-yellow-500" />
-                    <p className="text-lg font-medium">No car listings found</p>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Try adjusting your filters or check back later.
-                    </p>
-                  </div>
+                <div className="min-h-[400px]">
+                  {isCarListingsLoading ? (
+                    <div className="flex-1 flex items-center justify-center h-full">
+                      <Loader2 className="w-8 h-8 animate-spin" />
+                    </div>
+                  ) : carListingsError ? (
+                    <div className="flex-1">
+                      <Alert variant="destructive">
+                        <AlertTriangle className="h-4 w-4" />
+                        <AlertDescription>
+                          Failed to load car listings. Please try again later.
+                        </AlertDescription>
+                      </Alert>
+                    </div>
+                  ) : filteredCarListings && filteredCarListings.length > 0 ? (
+                    <ListingsGrid 
+                      listings={filteredCarListings} 
+                      listingType="cars" 
+                    />
+                  ) : (
+                    <div className="flex-1 flex items-center justify-center h-64">
+                      <div className="text-center">
+                        <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-yellow-500" />
+                        <p className="text-lg font-medium">No car listings found</p>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Try adjusting your filters or check back later.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
             </TabsContent>
 
-            <TabsContent value="realEstate" className="mt-0 flex flex-col md:grid md:grid-cols-[250px_1fr] gap-6">
-              <ListingsFilter 
-                filters={realEstateFilters} 
-                setFilters={setRealEstateFilters} 
-                listingType="realEstate" 
-              />
-              {isRealEstateListingsLoading ? (
-                <div className="flex-1 flex items-center justify-center">
-                  <Loader2 className="w-8 h-8 animate-spin" />
-                </div>
-              ) : realEstateListingsError ? (
-                <div className="flex-1">
-                  <Alert variant="destructive">
-                    <AlertTriangle className="h-4 w-4" />
-                    <AlertDescription>
-                      Failed to load real estate listings. Please try again later.
-                    </AlertDescription>
-                  </Alert>
-                </div>
-              ) : (
-                <ListingsGrid 
-                  listings={filteredRealEstateListings || []} 
+            <TabsContent value="realEstate" className="mt-0">
+              <div className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-6">
+                <ListingsFilter 
+                  filters={realEstateFilters} 
+                  setFilters={setRealEstateFilters} 
                   listingType="realEstate" 
                 />
-              )}
+                <div className="min-h-[400px]">
+                  {isRealEstateListingsLoading ? (
+                    <div className="flex-1 flex items-center justify-center h-full">
+                      <Loader2 className="w-8 h-8 animate-spin" />
+                    </div>
+                  ) : realEstateListingsError ? (
+                    <div className="flex-1">
+                      <Alert variant="destructive">
+                        <AlertTriangle className="h-4 w-4" />
+                        <AlertDescription>
+                          Failed to load real estate listings. Please try again later.
+                        </AlertDescription>
+                      </Alert>
+                    </div>
+                  ) : filteredRealEstateListings && filteredRealEstateListings.length > 0 ? (
+                    <ListingsGrid 
+                      listings={filteredRealEstateListings} 
+                      listingType="realEstate" 
+                    />
+                  ) : (
+                    <div className="flex-1 flex items-center justify-center h-64">
+                      <div className="text-center">
+                        <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-yellow-500" />
+                        <p className="text-lg font-medium">No real estate listings found</p>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Try adjusting your filters or check back later.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </TabsContent>
           </div>
         </Tabs>
