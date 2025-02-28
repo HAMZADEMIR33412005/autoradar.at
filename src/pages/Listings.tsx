@@ -176,15 +176,15 @@ const Listings = () => {
                 </Button>
 
                 <TabsContent value="cars" className="mt-0">
-                  <div className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-4 sm:gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-4 sm:gap-6 items-start">
                     <div className={cn(
                       "transition-all duration-300 overflow-hidden",
                       isFilterVisible ? "max-h-[1000px] mb-4" : "max-h-0 md:max-h-[1000px]"
                     )}>
                       <ListingsFilter 
-                        filters={carFilters} 
-                        setFilters={setCarFilters} 
-                        listingType="cars" 
+                      filters={carFilters} 
+                      setFilters={setCarFilters} 
+                      listingType="cars" 
                       />
                     </div>
                     <div className="min-h-[300px]">
