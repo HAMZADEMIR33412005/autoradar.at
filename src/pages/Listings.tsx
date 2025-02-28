@@ -133,7 +133,7 @@ const Listings = () => {
         <Navbar />
         <div className="container mx-auto px-4 py-2 sm:py-4">
           <Tabs defaultValue="cars" onValueChange={handleTabChange} className="w-full">
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4 mt-20">
               <h1 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-0">Listings</h1>
               <TabsList className="bg-background border border-gray-800 w-full sm:w-auto">
                 <TabsTrigger 
