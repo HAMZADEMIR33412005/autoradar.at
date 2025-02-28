@@ -109,7 +109,7 @@ export const ListingsGrid = ({ listings, listingType }: ListingsGridProps) => {
                 <p className="text-2xl font-bold text-primary">
                   {formatPrice(listing["Actual Price"])}
                 </p>
-                <div className="grid grid-cols-2 gap-2 text-sm items-start">
+                <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="bg-gray-900/30 rounded-lg p-2">
                     <p className="text-gray-400">Fläche</p>
                     <p className="font-medium">{formatArea(listing.Area)}</p>
