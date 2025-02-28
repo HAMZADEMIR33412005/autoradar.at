@@ -32,6 +32,9 @@ export const ListingsGrid = ({ listings, listingType }: ListingsGridProps) => {
     );
   }
 
+  // Debug output - uncomment if needed to troubleshoot
+  // console.log(`Rendering ${listings.length} ${listingType} listings:`, listings);
+
   return (
     <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {listingType === "cars" ? (
@@ -42,35 +45,43 @@ export const ListingsGrid = ({ listings, listingType }: ListingsGridProps) => {
             className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-[1.02] bg-white/5 backdrop-blur-lg border border-white/10"
           >
             <CardContent className="p-6">
-              <div className="aspect-video bg-surface-secondary rounded-lg mb-4 overflow-hidden">
-                <div className="w-full h-full flex items-center justify-center bg-gray-800/50 text-center p-4">
-                  <Car className="w-6 h-6 mr-2 text-primary" />
-                  <span className="text-gray-300 font-medium">{listing.Brand} {listing.Model}</span>
-                </div>
+              <div className="aspect-video bg-surface-secondary rounded-lg mb-4 overflow-hidden bg-gray-800/50 flex items-center justify-center">
+                <Car className="w-6 h-6 mr-2 text-primary" />
+                <span className="text-gray-300 font-medium">{listing.Brand || 'Unknown'} {listing.Model || ''}</span>
               </div>
-              <h3 className="text-lg font-semibold mb-3 line-clamp-2 min-h-[3.5rem]">{listing.Name}</h3>
+              <h3 className="text-lg font-semibold mb-3 line-clamp-2 min-h-[3.5rem]">{listing.Name || `${listing.Brand} ${listing.Model}`}</h3>
               <div className="space-y-3">
                 <p className="text-2xl font-bold text-primary">
-                  {formatPrice(listing["Actual Price"])}
+                  {typeof listing["Actual Price"] === 'number' ? formatPrice(listing["Actual Price"]) : 'Price unavailable'}
                 </p>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="bg-gray-900/30 rounded-lg p-2">
                     <p className="text-gray-400">Year</p>
-                    <p className="font-medium">{listing.Year}</p>
+                    <p className="font-medium">{listing.Year || 'N/A'}</p>
                   </div>
                   <div className="bg-gray-900/30 rounded-lg p-2">
                     <p className="text-gray-400">Mileage</p>
-                    <p className="font-medium">{formatMileage(listing.Mileage)}</p>
+                    <p className="font-medium">{typeof listing.Mileage === 'number' ? formatMileage(listing.Mileage) : 'N/A'}</p>
+                  </div>
+                  <div className="bg-gray-900/30 rounded-lg p-2">
+                    <p className="text-gray-400">Horsepower</p>
+                    <p className="font-medium">{typeof listing.Horsepower === 'number' ? `${Math.round(listing.Horsepower)} HP` : 'N/A'}</p>
+                  </div>
+                  <div className="bg-gray-900/30 rounded-lg p-2">
+                    <p className="text-gray-400">Seller</p>
+                    <p className="font-medium">{listing["Seller Type"] || 'N/A'}</p>
                   </div>
                 </div>
-                <p className="text-sm text-gray-400 break-words">
-                  📍 {listing.Location}
-                </p>
+                {listing.Location && (
+                  <p className="text-sm text-gray-400 break-words">
+                    📍 {listing.Location}
+                  </p>
+                )}
               </div>
             </CardContent>
             <CardFooter className="p-6 pt-0">
               <Button 
-                className="w-full bg-primary hover:bg-primary-hover"
+                className="w-full"
                 onClick={() => navigate(`/listings/cars/${index}`)}
               >
                 <Eye className="w-4 h-4 mr-2" />
