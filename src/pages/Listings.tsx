@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCarListings, fetchRealEstateListings } from "@/services/api";
 import { Navbar } from "@/components/Navbar";
@@ -72,9 +72,19 @@ const Listings = () => {
     retry: 2
   });
 
+  // Debug the received data
+  useEffect(() => {
+    console.log("Car listings data:", carListings);
+    console.log("Car listings loading:", isCarListingsLoading);
+    console.log("Car listings error:", carListingsError);
+  }, [carListings, isCarListingsLoading, carListingsError]);
+
   // Filter car listings based on selected filters
   const filteredCarListings = carListings?.filter((listing: CarListing) => {
-    if (carFilters.brand && listing.Brand.toLowerCase() !== carFilters.brand.toLowerCase()) return false;
+    // Check if listing has the required properties before filtering
+    if (!listing) return false;
+    
+    if (carFilters.brand && listing.Brand?.toLowerCase() !== carFilters.brand.toLowerCase()) return false;
     if (carFilters.minPrice && listing["Actual Price"] < Number(carFilters.minPrice)) return false;
     if (carFilters.maxPrice && listing["Actual Price"] > Number(carFilters.maxPrice)) return false;
     if (carFilters.minYear && listing.Year < Number(carFilters.minYear)) return false;
@@ -82,6 +92,12 @@ const Listings = () => {
     if (carFilters.sellerType && listing["Seller Type"] !== carFilters.sellerType) return false;
     return true;
   });
+
+  // Debug filtered listings
+  useEffect(() => {
+    console.log("Filtered car listings:", filteredCarListings);
+    console.log("Number of filtered car listings:", filteredCarListings?.length || 0);
+  }, [filteredCarListings]);
 
   // Filter real estate listings based on selected filters
   const filteredRealEstateListings = realEstateListings?.filter((listing: RealEstateListing) => {
@@ -153,11 +169,21 @@ const Listings = () => {
                     </AlertDescription>
                   </Alert>
                 </div>
-              ) : (
+              ) : filteredCarListings && filteredCarListings.length > 0 ? (
                 <ListingsGrid 
-                  listings={filteredCarListings || []} 
+                  listings={filteredCarListings} 
                   listingType="cars" 
                 />
+              ) : (
+                <div className="flex-1 flex items-center justify-center">
+                  <div className="text-center">
+                    <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-yellow-500" />
+                    <p className="text-lg font-medium">No car listings found</p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Try adjusting your filters or check back later.
+                    </p>
+                  </div>
+                </div>
               )}
             </TabsContent>
 
