@@ -126,10 +126,14 @@ export const ListingsFilter = ({ filters, setFilters, listingType }: FilterProps
             <div className="space-y-2">
               <Label>Property Type</Label>
               <Input
-                placeholder="Enter property type"
+                placeholder="Enter property type (0 for house, 1 for apartment)"
+                type="number"
+                min="0"
+                max="1"
                 value={(filters as RealEstateFilters).propertyType}
                 onChange={(e) => setFilters({ ...(filters as RealEstateFilters), propertyType: e.target.value })}
               />
+              <p className="text-xs text-gray-400">0 = House, 1 = Apartment</p>
             </div>
 
             <div className="space-y-2">

@@ -103,12 +103,14 @@ const Listings = () => {
 
   // Filter real estate listings based on selected filters
   const filteredRealEstateListings = realEstateListings?.filter((listing: RealEstateListing) => {
-    if (realEstateFilters.propertyType && 
-        listing["Property Type"].toLowerCase() !== realEstateFilters.propertyType.toLowerCase()) return false;
+    // Check if listing has the required properties before filtering
+    if (!listing) return false;
+    
+    if (realEstateFilters.propertyType && listing["Property Type"].toString() !== realEstateFilters.propertyType) return false;
     if (realEstateFilters.minPrice && listing["Actual Price"] < Number(realEstateFilters.minPrice)) return false;
     if (realEstateFilters.maxPrice && listing["Actual Price"] > Number(realEstateFilters.maxPrice)) return false;
     if (realEstateFilters.minRooms && listing.Rooms < Number(realEstateFilters.minRooms)) return false;
-    if (realEstateFilters.minArea && listing.Area < Number(realEstateFilters.minArea)) return false;
+    if (realEstateFilters.minArea && listing["Size (sqm)"] < Number(realEstateFilters.minArea)) return false;
     if (realEstateFilters.sellerType && listing["Seller Type"] !== realEstateFilters.sellerType) return false;
     return true;
   });

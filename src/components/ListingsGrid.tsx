@@ -46,8 +46,28 @@ export const ListingsGrid = ({ listings, listingType }: ListingsGridProps) => {
           >
             <CardContent className="p-6">
               <div className="aspect-video bg-surface-secondary rounded-lg mb-4 overflow-hidden bg-gray-800/50 flex items-center justify-center">
-                <Car className="w-6 h-6 mr-2 text-primary" />
-                <span className="text-gray-300 font-medium">{listing.Brand || 'Unbekannt'} {listing.Model || ''}</span>
+                {listing["Image File"] ? (
+                  <img 
+                    src={listing["Image File"]} 
+                    alt={listing.Name || `${listing.Brand} ${listing.Model}`}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = '';
+                      e.currentTarget.parentElement!.innerHTML = `
+                        <div class="w-full h-full flex items-center justify-center">
+                          <Car class="w-6 h-6 mr-2 text-primary" />
+                          <span class="text-gray-300 font-medium">${listing.Brand || 'Unbekannt'} ${listing.Model || ''}</span>
+                        </div>
+                      `;
+                    }}
+                  />
+                ) : (
+                  <>
+                    <Car className="w-6 h-6 mr-2 text-primary" />
+                    <span className="text-gray-300 font-medium">{listing.Brand || 'Unbekannt'} {listing.Model || ''}</span>
+                  </>
+                )}
               </div>
               <h3 className="text-lg font-semibold mb-3 line-clamp-2 min-h-[3.5rem]">{listing.Name || `${listing.Brand} ${listing.Model}`}</h3>
               <div className="space-y-3">
@@ -99,10 +119,28 @@ export const ListingsGrid = ({ listings, listingType }: ListingsGridProps) => {
           >
             <CardContent className="p-6">
               <div className="aspect-video bg-surface-secondary rounded-lg mb-4 overflow-hidden">
-                <div className="w-full h-full flex items-center justify-center bg-gray-800/50 text-center p-4">
-                  <Home className="w-6 h-6 mr-2 text-primary" />
-                  <span className="text-gray-300 font-medium">{listing["Property Type"]}</span>
-                </div>
+                {listing["Image File"] ? (
+                  <img 
+                    src={listing["Image File"]} 
+                    alt={listing.Name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = '';
+                      e.currentTarget.parentElement!.innerHTML = `
+                        <div class="w-full h-full flex items-center justify-center bg-gray-800/50 text-center p-4">
+                          <Home class="w-6 h-6 mr-2 text-primary" />
+                          <span class="text-gray-300 font-medium">${listing["House type"] || 'Immobilie'}</span>
+                        </div>
+                      `;
+                    }}
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-800/50 text-center p-4">
+                    <Home className="w-6 h-6 mr-2 text-primary" />
+                    <span className="text-gray-300 font-medium">{listing["House type"] || 'Immobilie'}</span>
+                  </div>
+                )}
               </div>
               <h3 className="text-lg font-semibold mb-3 line-clamp-2 min-h-[3.5rem]">{listing.Name}</h3>
               <div className="space-y-3">
@@ -112,7 +150,7 @@ export const ListingsGrid = ({ listings, listingType }: ListingsGridProps) => {
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="bg-gray-900/30 rounded-lg p-2">
                     <p className="text-gray-400">Fläche</p>
-                    <p className="font-medium">{formatArea(listing.Area)}</p>
+                    <p className="font-medium">{formatArea(listing["Size (sqm)"])}</p>
                   </div>
                   <div className="bg-gray-900/30 rounded-lg p-2">
                     <p className="text-gray-400">Zimmer</p>

@@ -86,23 +86,61 @@ const ListingDetail = () => {
         <Card className="p-8 bg-white/5 backdrop-blur-lg border border-white/10">
           <div className="grid md:grid-cols-2 gap-8">
             <div className="aspect-video bg-surface-secondary rounded-lg overflow-hidden">
-              <div className="w-full h-full flex items-center justify-center bg-gray-800/50 text-center p-4">
-                {isCarListing ? (
-                  <>
-                    <Car className="w-6 h-6 mr-2 text-primary" />
-                    <span className="text-gray-300 font-medium text-lg">
-                      {(listing as CarListing).Brand} {(listing as CarListing).Model}
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <Home className="w-6 h-6 mr-2 text-primary" />
-                    <span className="text-gray-300 font-medium text-lg">
-                      {(listing as RealEstateListing)["Property Type"]}
-                    </span>
-                  </>
-                )}
-              </div>
+              {isCarListing && (listing as CarListing)["Image File"] ? (
+                <img 
+                  src={(listing as CarListing)["Image File"]} 
+                  alt={(listing as CarListing).Name || `${(listing as CarListing).Brand} ${(listing as CarListing).Model}`}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = '';
+                    e.currentTarget.parentElement!.innerHTML = `
+                      <div class="w-full h-full flex items-center justify-center bg-gray-800/50 text-center p-4">
+                        <Car class="w-6 h-6 mr-2 text-primary" />
+                        <span class="text-gray-300 font-medium text-lg">
+                          ${(listing as CarListing).Brand} ${(listing as CarListing).Model}
+                        </span>
+                      </div>
+                    `;
+                  }}
+                />
+              ) : !isCarListing && (listing as RealEstateListing)["Image File"] ? (
+                <img 
+                  src={(listing as RealEstateListing)["Image File"]} 
+                  alt={(listing as RealEstateListing).Name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = '';
+                    e.currentTarget.parentElement!.innerHTML = `
+                      <div class="w-full h-full flex items-center justify-center bg-gray-800/50 text-center p-4">
+                        <Home class="w-6 h-6 mr-2 text-primary" />
+                        <span class="text-gray-300 font-medium text-lg">
+                          ${(listing as RealEstateListing)["House type"] || 'Immobilie'}
+                        </span>
+                      </div>
+                    `;
+                  }}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gray-800/50 text-center p-4">
+                  {isCarListing ? (
+                    <>
+                      <Car className="w-6 h-6 mr-2 text-primary" />
+                      <span className="text-gray-300 font-medium text-lg">
+                        {(listing as CarListing).Brand} {(listing as CarListing).Model}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <Home className="w-6 h-6 mr-2 text-primary" />
+                      <span className="text-gray-300 font-medium text-lg">
+                        {(listing as RealEstateListing)["House type"] || 'Immobilie'}
+                      </span>
+                    </>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="space-y-8">
@@ -138,19 +176,21 @@ const ListingDetail = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-gray-900/30 rounded-lg p-4">
                     <p className="text-sm text-gray-400 mb-1">Objekttyp</p>
-                    <p className="font-medium text-lg">{(listing as RealEstateListing)["Property Type"]}</p>
+                    <p className="font-medium text-lg">
+                      {(listing as RealEstateListing)["Property Type"] === 0 ? "Haus" : "Wohnung"}
+                    </p>
                   </div>
                   <div className="bg-gray-900/30 rounded-lg p-4">
-                    <p className="text-sm text-gray-400 mb-1">Fläche</p>
-                    <p className="font-medium text-lg">{formatArea((listing as RealEstateListing).Area)}</p>
+                    <p className="text-gray-400 text-sm">Fläche</p>
+                    <p className="font-medium text-lg">{formatArea((listing as RealEstateListing)["Size (sqm)"])}</p>
                   </div>
                   <div className="bg-gray-900/30 rounded-lg p-4">
                     <p className="text-sm text-gray-400 mb-1">Zimmer</p>
                     <p className="font-medium text-lg">{(listing as RealEstateListing).Rooms}</p>
                   </div>
                   <div className="bg-gray-900/30 rounded-lg p-4">
-                    <p className="text-sm text-gray-400 mb-1">Baujahr</p>
-                    <p className="font-medium text-lg">{(listing as RealEstateListing)["Year Built"]}</p>
+                    <p className="text-sm text-gray-400 mb-1">Haustyp</p>
+                    <p className="font-medium text-lg">{(listing as RealEstateListing)["House type"] || "Nicht angegeben"}</p>
                   </div>
                 </div>
               )}
