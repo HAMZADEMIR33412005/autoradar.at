@@ -176,6 +176,21 @@ export const ListingsGrid = ({ listings, listingType }: ListingsGridProps) => {
                 <p className="text-sm text-gray-400 break-words">
                   📍 {listing.Location}
                 </p>
+                <div className="mt-2">
+                  <Badge className={`${listing["Property Type"] === 1 ? "bg-green-600/80 hover:bg-green-600 border-green-600" : "bg-yellow-600/80 hover:bg-yellow-600 border-yellow-600"} inline-flex items-center`}>
+                    {listing["Property Type"] === 1 ? (
+                      <>
+                        <CheckCircle className="w-3.5 h-3.5 mr-1" />
+                        Qualifiziert
+                      </>
+                    ) : (
+                      <>
+                        <AlertTriangle className="w-3.5 h-3.5 mr-1" />
+                        Nicht qualifiziert
+                      </>
+                    )}
+                  </Badge>
+                </div>
               </div>
             </CardContent>
             <CardFooter className="p-6 pt-0">
