@@ -163,16 +163,16 @@ export const ListingsFilter = ({ filters, setFilters, listingType }: FilterProps
                 className="flex flex-col space-y-1 mt-1"
               >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="0" id="house" />
-                  <Label htmlFor="house" className="cursor-pointer">House</Label>
+                  <RadioGroupItem value="" id="any-property" />
+                  <Label htmlFor="any-property" className="cursor-pointer">All</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="1" id="apartment" />
-                  <Label htmlFor="apartment" className="cursor-pointer">Apartment</Label>
+                  <Label htmlFor="apartment" className="cursor-pointer">Qualified</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="" id="any-property" />
-                  <Label htmlFor="any-property" className="cursor-pointer">Any</Label>
+                  <RadioGroupItem value="0" id="house" />
+                  <Label htmlFor="house" className="cursor-pointer">Unqualified</Label>
                 </div>
               </RadioGroup>
             </div>
