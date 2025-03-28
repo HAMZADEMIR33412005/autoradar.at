@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCarListings, fetchRealEstateListings } from "@/services/api";
 import { Navbar } from "@/components/Navbar";
@@ -6,7 +6,7 @@ import { Footer } from "@/components/Footer";
 import { ListingsFilter } from "@/components/ListingsFilter";
 import { ListingsGrid } from "@/components/ListingsGrid";
 import { ListingType, CarListing, RealEstateListing } from "@/types/listing";
-import { Loader2, AlertTriangle, Car, Home, Filter, X } from "lucide-react";
+import { Loader2, AlertTriangle, Car, Home, Filter, X, ChevronDown } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -37,6 +37,9 @@ interface RealEstateFilters {
 const Listings = () => {
   const [activeTab, setActiveTab] = useState<ListingType>("cars");
   const [isFilterVisible, setIsFilterVisible] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(30); // Number of listings to show initially
+  const [loadingMore, setLoadingMore] = useState(false);
+  const loadMoreRef = useRef<HTMLDivElement>(null); // Reference for intersection observer
   
   const [carFilters, setCarFilters] = useState<CarFilters>({
     brand: "",
@@ -174,6 +177,46 @@ const Listings = () => {
     });
   }, [realEstateListings, realEstateFilters]);
 
+  // Setup intersection observer for lazy loading
+  useEffect(() => {
+    // Reset visible count when tab or filters change
+    setVisibleCount(30);
+  }, [activeTab, carFilters, realEstateFilters]);
+
+  // Intersection observer for lazy loading
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting) {
+          setLoadingMore(true);
+          setTimeout(() => {
+            setVisibleCount((prev) => prev + 30);
+            setLoadingMore(false);
+          }, 500); // Small delay to show loading indicator
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentLoadMoreRef = loadMoreRef.current;
+    if (currentLoadMoreRef) {
+      observer.observe(currentLoadMoreRef);
+    }
+
+    return () => {
+      if (currentLoadMoreRef) {
+        observer.unobserve(currentLoadMoreRef);
+      }
+    };
+  }, [filteredCarListings, filteredRealEstateListings]);
+
+  // Get the current filtered listings based on active tab
+  const currentListings = activeTab === 'cars' ? filteredCarListings : filteredRealEstateListings;
+  
+  // Slice the listings to show only the visible amount
+  const visibleListings = currentListings?.slice(0, visibleCount) || [];
+
   // Handle tab change
   const handleTabChange = (value: string) => {
     setActiveTab(value as ListingType);
@@ -262,9 +305,9 @@ const Listings = () => {
                             </AlertDescription>
                           </Alert>
                         </div>
-                      ) : filteredCarListings && filteredCarListings.length > 0 ? (
+                      ) : visibleListings && visibleListings.length > 0 ? (
                         <ListingsGrid 
-                          listings={filteredCarListings} 
+                          listings={visibleListings} 
                           listingType="cars" 
                         />
                       ) : (
@@ -278,6 +321,27 @@ const Listings = () => {
                           </div>
                         </div>
                       )}
+                      {/* Loading indicator */}
+                      {loadingMore && (
+                        <div className="flex justify-center items-center py-6">
+                          <Loader2 className="w-6 h-6 animate-spin mr-2" />
+                          <span>Weitere Inserate werden geladen...</span>
+                        </div>
+                      )}
+                      {/* "Load More" button shown when there are more listings to load */}
+                      {!loadingMore && visibleListings.length > 0 && visibleListings.length < currentListings.length && (
+                        <div className="flex justify-center mt-6 mb-6">
+                          <Button 
+                            variant="outline" 
+                            onClick={() => setVisibleCount(prev => prev + 30)}
+                            className="flex items-center gap-2"
+                          >
+                            <ChevronDown className="h-4 w-4" />
+                            Mehr anzeigen ({visibleListings.length} von {currentListings.length})
+                          </Button>
+                        </div>
+                      )}
+                      <div ref={loadMoreRef} className="h-10"></div>
                     </div>
                   </div>
                 </TabsContent>
@@ -308,9 +372,9 @@ const Listings = () => {
                             </AlertDescription>
                           </Alert>
                         </div>
-                      ) : filteredRealEstateListings && filteredRealEstateListings.length > 0 ? (
+                      ) : visibleListings && visibleListings.length > 0 ? (
                         <ListingsGrid 
-                          listings={filteredRealEstateListings} 
+                          listings={visibleListings} 
                           listingType="realEstate" 
                         />
                       ) : (
@@ -324,6 +388,27 @@ const Listings = () => {
                           </div>
                         </div>
                       )}
+                      {/* Loading indicator */}
+                      {loadingMore && (
+                        <div className="flex justify-center items-center py-6">
+                          <Loader2 className="w-6 h-6 animate-spin mr-2" />
+                          <span>Weitere Inserate werden geladen...</span>
+                        </div>
+                      )}
+                      {/* "Load More" button shown when there are more listings to load */}
+                      {!loadingMore && visibleListings.length > 0 && visibleListings.length < currentListings.length && (
+                        <div className="flex justify-center mt-6 mb-6">
+                          <Button 
+                            variant="outline" 
+                            onClick={() => setVisibleCount(prev => prev + 30)}
+                            className="flex items-center gap-2"
+                          >
+                            <ChevronDown className="h-4 w-4" />
+                            Mehr anzeigen ({visibleListings.length} von {currentListings.length})
+                          </Button>
+                        </div>
+                      )}
+                      <div ref={loadMoreRef} className="h-10"></div>
                     </div>
                   </div>
                 </TabsContent>
