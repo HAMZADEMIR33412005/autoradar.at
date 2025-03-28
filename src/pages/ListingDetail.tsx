@@ -37,10 +37,12 @@ const ListingDetail = () => {
 
   const isLoading = isCarListing ? isCarListingsLoading : isRealEstateListingsLoading;
   
-  // Get the appropriate listing based on the route type
+  // Get the appropriate listing by Ad Link instead of index
+  const decodedAdLink = id ? decodeURIComponent(id) : '';
+  
   const listing = isCarListing 
-    ? carListings?.[Number(id)] as CarListing 
-    : realEstateListings?.[Number(id)] as RealEstateListing;
+    ? carListings?.find(car => car["Ad Link"] === decodedAdLink) as CarListing 
+    : realEstateListings?.find(property => property["Ad Link"] === decodedAdLink) as RealEstateListing;
 
   const formatPrice = (price: number) => {
     return `€${price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
@@ -150,6 +152,17 @@ const ListingDetail = () => {
                 <p className="text-3xl md:text-4xl font-bold text-primary">
                   {formatPrice(listing["Actual Price"])}
                 </p>
+                {listing["Predicted Price"] && (
+                  <div className="mt-2 bg-gray-800/30 rounded-lg p-3 border border-gray-700/50">
+                    <p className="text-gray-300 flex items-center">
+                      <span className="font-medium">Geschätzter Marktwert:</span>
+                      <span className="ml-2 text-lg text-primary-300 font-semibold">{formatPrice(listing["Predicted Price"])}</span>
+                    </p>
+                    <p className="text-xs text-gray-400 mt-1">
+                      Basierend auf vergleichbaren Angeboten und Marktdaten
+                    </p>
+                  </div>
+                )}
               </div>
 
               {isCarListing ? (

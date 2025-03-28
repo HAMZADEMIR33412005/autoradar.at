@@ -75,6 +75,11 @@ export const ListingsGrid = ({ listings, listingType }: ListingsGridProps) => {
                 <p className="text-2xl font-bold text-primary">
                   {typeof listing["Actual Price"] === 'number' ? formatPrice(listing["Actual Price"]) : 'Preis auf Anfrage'}
                 </p>
+                {listing["Predicted Price"] && (
+                  <p className="text-sm text-gray-400">
+                    Geschätzter Marktwert: {formatPrice(listing["Predicted Price"])}
+                  </p>
+                )}
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="bg-gray-900/30 rounded-lg p-2">
                     <p className="text-gray-400">Baujahr</p>
@@ -118,7 +123,7 @@ export const ListingsGrid = ({ listings, listingType }: ListingsGridProps) => {
             <CardFooter className="p-6 pt-0">
               <Button 
                 className="w-full"
-                onClick={() => navigate(`/listings/cars/${index}`)}
+                onClick={() => navigate(`/listings/cars/${encodeURIComponent(listing["Ad Link"])}`)}
               >
                 <Eye className="w-4 h-4 mr-2" />
                 Details ansehen
@@ -163,6 +168,11 @@ export const ListingsGrid = ({ listings, listingType }: ListingsGridProps) => {
                 <p className="text-2xl font-bold text-primary">
                   {formatPrice(listing["Actual Price"])}
                 </p>
+                {listing["Predicted Price"] && (
+                  <p className="text-sm text-gray-400">
+                    Geschätzter Marktwert: {formatPrice(listing["Predicted Price"])}
+                  </p>
+                )}
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="bg-gray-900/30 rounded-lg p-2">
                     <p className="text-gray-400">Fläche</p>
@@ -196,7 +206,7 @@ export const ListingsGrid = ({ listings, listingType }: ListingsGridProps) => {
             <CardFooter className="p-6 pt-0">
               <Button 
                 className="w-full bg-primary hover:bg-primary-hover"
-                onClick={() => navigate(`/listings/realestate/${index}`)}
+                onClick={() => navigate(`/listings/realestate/${encodeURIComponent(listing["Ad Link"])}`)}
               >
                 <Eye className="w-4 h-4 mr-2" />
                 Details ansehen
