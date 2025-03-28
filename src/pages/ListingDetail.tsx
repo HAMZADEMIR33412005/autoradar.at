@@ -5,7 +5,8 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, ExternalLink, Loader2, Car, Home } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { ArrowLeft, ExternalLink, Loader2, Car, Home, CheckCircle, AlertTriangle } from "lucide-react";
 import { CarListing, RealEstateListing } from "@/types/listing";
 
 const ListingDetail = () => {
@@ -169,6 +170,26 @@ const ListingDetail = () => {
                   <div className="bg-gray-900/30 rounded-lg p-4">
                     <p className="text-sm text-gray-400 mb-1">Marke/Modell</p>
                     <p className="font-medium text-lg">{(listing as CarListing).Brand} {(listing as CarListing).Model}</p>
+                  </div>
+                  <div className="bg-gray-900/30 rounded-lg p-4">
+                    <p className="text-sm text-gray-400 mb-1">Qualifizierter Status</p>
+                    <Badge 
+                      className={(listing as CarListing).Qualified === 1 ? 
+                        "bg-green-600/80 hover:bg-green-600 border-green-600" : 
+                        "bg-yellow-600/80 hover:bg-yellow-600 border-yellow-600"}
+                    >
+                      {(listing as CarListing).Qualified === 1 ? (
+                        <>
+                          <CheckCircle className="w-4 h-4 mr-1" />
+                          Qualifiziert
+                        </>
+                      ) : (
+                        <>
+                          <AlertTriangle className="w-4 h-4 mr-1" />
+                          Nicht qualifiziert
+                        </>
+                      )}
+                    </Badge>
                   </div>
                 </div>
               ) : (

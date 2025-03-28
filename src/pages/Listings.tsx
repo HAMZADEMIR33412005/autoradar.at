@@ -19,6 +19,7 @@ interface CarFilters {
   minYear: string;
   maxYear: string;
   sellerType: string;
+  qualified: string; // "all", "qualified", "unqualified"
 }
 
 interface RealEstateFilters {
@@ -41,6 +42,7 @@ const Listings = () => {
     minYear: "",
     maxYear: "",
     sellerType: "",
+    qualified: "all",
   });
 
   const [realEstateFilters, setRealEstateFilters] = useState<RealEstateFilters>({
@@ -86,12 +88,38 @@ const Listings = () => {
     // Check if listing has the required properties before filtering
     if (!listing) return false;
     
-    if (carFilters.brand && listing.Brand?.toLowerCase() !== carFilters.brand.toLowerCase()) return false;
+    // Improved brand filter: checks brand and model for partial matches
+    if (carFilters.brand) {
+      const searchTerm = carFilters.brand.toLowerCase().trim();
+      const brand = (listing.Brand || '').toLowerCase();
+      const model = (listing.Model || '').toLowerCase();
+      const name = (listing.Name || '').toLowerCase();
+      
+      // Check if search term appears in brand, model or full name
+      const brandMatch = brand.includes(searchTerm);
+      const modelMatch = model.includes(searchTerm);
+      const nameMatch = name.includes(searchTerm);
+      
+      if (!brandMatch && !modelMatch && !nameMatch) return false;
+    }
+    
     if (carFilters.minPrice && listing["Actual Price"] < Number(carFilters.minPrice)) return false;
     if (carFilters.maxPrice && listing["Actual Price"] > Number(carFilters.maxPrice)) return false;
     if (carFilters.minYear && listing.Year < Number(carFilters.minYear)) return false;
     if (carFilters.maxYear && listing.Year > Number(carFilters.maxYear)) return false;
-    if (carFilters.sellerType && listing["Seller Type"] !== carFilters.sellerType) return false;
+    
+    // Improved seller type filter for partial matches
+    if (carFilters.sellerType) {
+      const sellerSearchTerm = carFilters.sellerType.toLowerCase().trim();
+      const sellerType = (listing["Seller Type"] || '').toLowerCase();
+      
+      if (!sellerType.includes(sellerSearchTerm)) return false;
+    }
+    
+    // Filter by qualified status
+    if (carFilters.qualified === "qualified" && listing.Qualified !== 1) return false;
+    if (carFilters.qualified === "unqualified" && listing.Qualified !== 0) return false;
+    
     return true;
   });
 
@@ -106,12 +134,24 @@ const Listings = () => {
     // Check if listing has the required properties before filtering
     if (!listing) return false;
     
+    // Property Type remains as exact match since it's a numeric type
     if (realEstateFilters.propertyType && listing["Property Type"].toString() !== realEstateFilters.propertyType) return false;
+    
+    // Numeric filters
     if (realEstateFilters.minPrice && listing["Actual Price"] < Number(realEstateFilters.minPrice)) return false;
     if (realEstateFilters.maxPrice && listing["Actual Price"] > Number(realEstateFilters.maxPrice)) return false;
     if (realEstateFilters.minRooms && listing.Rooms < Number(realEstateFilters.minRooms)) return false;
     if (realEstateFilters.minArea && listing["Size (sqm)"] < Number(realEstateFilters.minArea)) return false;
-    if (realEstateFilters.sellerType && listing["Seller Type"] !== realEstateFilters.sellerType) return false;
+    
+    // Improved seller type filter for partial matches
+    if (realEstateFilters.sellerType) {
+      const sellerSearchTerm = realEstateFilters.sellerType.toLowerCase().trim();
+      const sellerType = (listing["Seller Type"] || '').toLowerCase();
+      
+      // Check if search term is included in seller type
+      if (!sellerType.includes(sellerSearchTerm)) return false;
+    }
+    
     return true;
   });
 

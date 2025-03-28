@@ -2,6 +2,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue 
+} from "@/components/ui/select";
 import { ListingType } from "@/types/listing";
 
 interface CarFilters {
@@ -11,6 +18,7 @@ interface CarFilters {
   minYear: string;
   maxYear: string;
   sellerType: string;
+  qualified: string; // "all", "qualified", "unqualified"
 }
 
 interface RealEstateFilters {
@@ -40,6 +48,7 @@ export const ListingsFilter = ({ filters, setFilters, listingType }: FilterProps
         minYear: "",
         maxYear: "",
         sellerType: "",
+        qualified: "all",
       });
     } else {
       setFilters({
@@ -118,6 +127,23 @@ export const ListingsFilter = ({ filters, setFilters, listingType }: FilterProps
                 value={(filters as CarFilters).sellerType}
                 onChange={(e) => setFilters({ ...(filters as CarFilters), sellerType: e.target.value })}
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Qualified</Label>
+              <Select
+                value={(filters as CarFilters).qualified}
+                onValueChange={(value) => setFilters({ ...(filters as CarFilters), qualified: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select qualification" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="qualified">Qualified</SelectItem>
+                  <SelectItem value="unqualified">Unqualified</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </>
         ) : (

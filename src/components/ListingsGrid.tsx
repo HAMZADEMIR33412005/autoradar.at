@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { CarListing, RealEstateListing, ListingType } from "@/types/listing";
-import { Eye, Car, Home } from "lucide-react";
+import { Eye, Car, Home, CheckCircle, AlertTriangle } from "lucide-react";
 
 interface ListingsGridProps {
   listings: CarListing[] | RealEstateListing[];
@@ -97,6 +98,21 @@ export const ListingsGrid = ({ listings, listingType }: ListingsGridProps) => {
                     📍 {listing.Location}
                   </p>
                 )}
+                <div className="mt-2">
+                  <Badge className={`${listing.Qualified === 1 ? "bg-green-600/80 hover:bg-green-600 border-green-600" : "bg-yellow-600/80 hover:bg-yellow-600 border-yellow-600"} inline-flex items-center`}>
+                    {listing.Qualified === 1 ? (
+                      <>
+                        <CheckCircle className="w-3.5 h-3.5 mr-1" />
+                        Qualifiziert
+                      </>
+                    ) : (
+                      <>
+                        <AlertTriangle className="w-3.5 h-3.5 mr-1" />
+                        Nicht qualifiziert
+                      </>
+                    )}
+                  </Badge>
+                </div>
               </div>
             </CardContent>
             <CardFooter className="p-6 pt-0">
