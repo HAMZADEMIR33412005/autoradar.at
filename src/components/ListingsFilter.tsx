@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue 
 } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ListingType } from "@/types/listing";
 
 interface CarFilters {
@@ -131,19 +132,24 @@ export const ListingsFilter = ({ filters, setFilters, listingType }: FilterProps
 
             <div className="space-y-2">
               <Label>Qualified</Label>
-              <Select
+              <RadioGroup 
                 value={(filters as CarFilters).qualified}
                 onValueChange={(value) => setFilters({ ...(filters as CarFilters), qualified: value })}
+                className="flex flex-col space-y-1 mt-1"
               >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select qualification" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="qualified">Qualified</SelectItem>
-                  <SelectItem value="unqualified">Unqualified</SelectItem>
-                </SelectContent>
-              </Select>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="all" id="all" />
+                  <Label htmlFor="all" className="cursor-pointer">All</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="qualified" id="qualified" />
+                  <Label htmlFor="qualified" className="cursor-pointer">Qualified</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="unqualified" id="unqualified" />
+                  <Label htmlFor="unqualified" className="cursor-pointer">Unqualified</Label>
+                </div>
+              </RadioGroup>
             </div>
           </>
         ) : (
@@ -151,15 +157,24 @@ export const ListingsFilter = ({ filters, setFilters, listingType }: FilterProps
           <>
             <div className="space-y-2">
               <Label>Property Type</Label>
-              <Input
-                placeholder="Enter property type (0 for house, 1 for apartment)"
-                type="number"
-                min="0"
-                max="1"
+              <RadioGroup 
                 value={(filters as RealEstateFilters).propertyType}
-                onChange={(e) => setFilters({ ...(filters as RealEstateFilters), propertyType: e.target.value })}
-              />
-              <p className="text-xs text-gray-400">0 = House, 1 = Apartment</p>
+                onValueChange={(value) => setFilters({ ...(filters as RealEstateFilters), propertyType: value })}
+                className="flex flex-col space-y-1 mt-1"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="0" id="house" />
+                  <Label htmlFor="house" className="cursor-pointer">House</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="1" id="apartment" />
+                  <Label htmlFor="apartment" className="cursor-pointer">Apartment</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="" id="any-property" />
+                  <Label htmlFor="any-property" className="cursor-pointer">Any</Label>
+                </div>
+              </RadioGroup>
             </div>
 
             <div className="space-y-2">
