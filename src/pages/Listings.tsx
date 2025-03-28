@@ -18,6 +18,8 @@ interface CarFilters {
   maxPrice: string;
   minYear: string;
   maxYear: string;
+  minKm: string;
+  maxKm: string;
   sellerType: string;
   qualified: string; // "all", "qualified", "unqualified"
 }
@@ -41,6 +43,8 @@ const Listings = () => {
     maxPrice: "",
     minYear: "",
     maxYear: "",
+    minKm: "",
+    maxKm: "",
     sellerType: "",
     qualified: "all",
   });
@@ -107,6 +111,8 @@ const Listings = () => {
     if (carFilters.maxPrice && listing["Actual Price"] > Number(carFilters.maxPrice)) return false;
     if (carFilters.minYear && listing.Year < Number(carFilters.minYear)) return false;
     if (carFilters.maxYear && listing.Year > Number(carFilters.maxYear)) return false;
+    if (carFilters.minKm && listing.Mileage < Number(carFilters.minKm)) return false;
+    if (carFilters.maxKm && listing.Mileage > Number(carFilters.maxKm)) return false;
     
     // Improved seller type filter for partial matches
     if (carFilters.sellerType) {

@@ -18,6 +18,8 @@ interface CarFilters {
   maxPrice: string;
   minYear: string;
   maxYear: string;
+  minKm: string;
+  maxKm: string;
   sellerType: string;
   qualified: string; // "all", "qualified", "unqualified"
 }
@@ -48,6 +50,8 @@ export const ListingsFilter = ({ filters, setFilters, listingType }: FilterProps
         maxPrice: "",
         minYear: "",
         maxYear: "",
+        minKm: "",
+        maxKm: "",
         sellerType: "",
         qualified: "all",
       });
@@ -66,9 +70,9 @@ export const ListingsFilter = ({ filters, setFilters, listingType }: FilterProps
   return (
     <Card className="w-full md:w-64 p-4 space-y-4 h-fit md:sticky top-24 md:self-start">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Filters</h2>
+        <h2 className="text-lg font-semibold">Filter</h2>
         <Button variant="ghost" size="sm" onClick={resetFilters}>
-          Reset
+          Zurücksetzen
         </Button>
       </div>
 
@@ -77,16 +81,16 @@ export const ListingsFilter = ({ filters, setFilters, listingType }: FilterProps
           // Car filters
           <>
             <div className="space-y-2">
-              <Label>Brand</Label>
+              <Label>Marke</Label>
               <Input
-                placeholder="Enter brand"
+                placeholder="Marke eingeben"
                 value={(filters as CarFilters).brand}
                 onChange={(e) => setFilters({ ...(filters as CarFilters), brand: e.target.value })}
               />
             </div>
 
             <div className="space-y-2">
-              <Label>Price Range</Label>
+              <Label>Preisbereich</Label>
               <div className="grid grid-cols-2 gap-2">
                 <Input
                   placeholder="Min"
@@ -104,7 +108,7 @@ export const ListingsFilter = ({ filters, setFilters, listingType }: FilterProps
             </div>
 
             <div className="space-y-2">
-              <Label>Year Range</Label>
+              <Label>Baujahr</Label>
               <div className="grid grid-cols-2 gap-2">
                 <Input
                   placeholder="Min"
@@ -122,16 +126,34 @@ export const ListingsFilter = ({ filters, setFilters, listingType }: FilterProps
             </div>
 
             <div className="space-y-2">
-              <Label>Seller Type</Label>
+              <Label>Kilometerstand</Label>
+              <div className="grid grid-cols-2 gap-2">
+                <Input
+                  placeholder="Min"
+                  type="number"
+                  value={(filters as CarFilters).minKm}
+                  onChange={(e) => setFilters({ ...(filters as CarFilters), minKm: e.target.value })}
+                />
+                <Input
+                  placeholder="Max"
+                  type="number"
+                  value={(filters as CarFilters).maxKm}
+                  onChange={(e) => setFilters({ ...(filters as CarFilters), maxKm: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Verkäufertyp</Label>
               <Input
-                placeholder="Enter seller type"
+                placeholder="Verkäufertyp eingeben"
                 value={(filters as CarFilters).sellerType}
                 onChange={(e) => setFilters({ ...(filters as CarFilters), sellerType: e.target.value })}
               />
             </div>
 
             <div className="space-y-2">
-              <Label>Qualified</Label>
+              <Label>Qualifiziert</Label>
               <RadioGroup 
                 value={(filters as CarFilters).qualified}
                 onValueChange={(value) => setFilters({ ...(filters as CarFilters), qualified: value })}
@@ -139,15 +161,15 @@ export const ListingsFilter = ({ filters, setFilters, listingType }: FilterProps
               >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="all" id="all" />
-                  <Label htmlFor="all" className="cursor-pointer">All</Label>
+                  <Label htmlFor="all" className="cursor-pointer">Alle</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="qualified" id="qualified" />
-                  <Label htmlFor="qualified" className="cursor-pointer">Qualified</Label>
+                  <Label htmlFor="qualified" className="cursor-pointer">Qualifiziert</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="unqualified" id="unqualified" />
-                  <Label htmlFor="unqualified" className="cursor-pointer">Unqualified</Label>
+                  <Label htmlFor="unqualified" className="cursor-pointer">Nicht qualifiziert</Label>
                 </div>
               </RadioGroup>
             </div>
@@ -156,7 +178,7 @@ export const ListingsFilter = ({ filters, setFilters, listingType }: FilterProps
           // Real Estate filters
           <>
             <div className="space-y-2">
-              <Label>Property Type</Label>
+              <Label>Immobilientyp</Label>
               <RadioGroup 
                 value={(filters as RealEstateFilters).propertyType}
                 onValueChange={(value) => setFilters({ ...(filters as RealEstateFilters), propertyType: value })}
@@ -164,21 +186,21 @@ export const ListingsFilter = ({ filters, setFilters, listingType }: FilterProps
               >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="" id="any-property" />
-                  <Label htmlFor="any-property" className="cursor-pointer">All</Label>
+                  <Label htmlFor="any-property" className="cursor-pointer">Alle</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="1" id="apartment" />
-                  <Label htmlFor="apartment" className="cursor-pointer">Qualified</Label>
+                  <Label htmlFor="apartment" className="cursor-pointer">Wohnung</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="0" id="house" />
-                  <Label htmlFor="house" className="cursor-pointer">Unqualified</Label>
+                  <Label htmlFor="house" className="cursor-pointer">Haus</Label>
                 </div>
               </RadioGroup>
             </div>
 
             <div className="space-y-2">
-              <Label>Price Range</Label>
+              <Label>Preisbereich</Label>
               <div className="grid grid-cols-2 gap-2">
                 <Input
                   placeholder="Min"
@@ -196,9 +218,9 @@ export const ListingsFilter = ({ filters, setFilters, listingType }: FilterProps
             </div>
 
             <div className="space-y-2">
-              <Label>Min Rooms</Label>
+              <Label>Mindestanzahl Zimmer</Label>
               <Input
-                placeholder="Min rooms"
+                placeholder="Min Zimmer"
                 type="number"
                 value={(filters as RealEstateFilters).minRooms}
                 onChange={(e) => setFilters({ ...(filters as RealEstateFilters), minRooms: e.target.value })}
@@ -206,9 +228,9 @@ export const ListingsFilter = ({ filters, setFilters, listingType }: FilterProps
             </div>
 
             <div className="space-y-2">
-              <Label>Min Area (m²)</Label>
+              <Label>Mindestfläche (m²)</Label>
               <Input
-                placeholder="Min area"
+                placeholder="Min Fläche"
                 type="number"
                 value={(filters as RealEstateFilters).minArea}
                 onChange={(e) => setFilters({ ...(filters as RealEstateFilters), minArea: e.target.value })}
@@ -216,9 +238,9 @@ export const ListingsFilter = ({ filters, setFilters, listingType }: FilterProps
             </div>
 
             <div className="space-y-2">
-              <Label>Seller Type</Label>
+              <Label>Verkäufertyp</Label>
               <Input
-                placeholder="Enter seller type"
+                placeholder="Verkäufertyp eingeben"
                 value={(filters as RealEstateFilters).sellerType}
                 onChange={(e) => setFilters({ ...(filters as RealEstateFilters), sellerType: e.target.value })}
               />
