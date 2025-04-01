@@ -226,6 +226,7 @@ const ListingDetail = () => {
                     <p className="text-sm text-gray-400 mb-1">Haustyp</p>
                     <p className="font-medium text-lg">{(listing as RealEstateListing)["House type"] || "Nicht angegeben"}</p>
                   </div>
+                  {/* Qualification status hidden for real estate listings */}
                 </div>
               )}
 

@@ -199,6 +199,8 @@ export const ListingsFilter = ({ filters, setFilters, listingType }: FilterProps
               </RadioGroup>
             </div>
 
+            {/* Note: Property Type qualification filter is hidden as requested */}
+
             <div className="space-y-2">
               <Label>Preisbereich</Label>
               <div className="grid grid-cols-2 gap-2">
